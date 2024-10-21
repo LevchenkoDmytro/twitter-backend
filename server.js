@@ -1,4 +1,5 @@
 import express from "express";
+import path from "path";
 import authRoutes from './routes/auth.route.js'
 import userRoutes from './routes/user.route.js'
 import postsRoutes from './routes/posts.route.js'
@@ -13,7 +14,7 @@ dotenv.config()
 
 const app = express();
 const PORT = process.env.PORT || 5000;
-
+const __dirname = path.resolve();
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -39,6 +40,15 @@ app.use("/api/notifications", notificationRoutes);
 app.use('/', (req,res) => {
   res.send("Server is running")
 })
+
+if (process.env.NODE_ENV === "production") {
+	app.use(express.static(path.join(__dirname, "/frontend/dist")));
+
+	app.get("*", (req, res) => {
+		res.sendFile(path.resolve(__dirname, "frontend", "dist", "index.html"));
+	});
+}
+
 
 app.listen(PORT, () => {
   console.log(`server is running on port ${PORT}`);
