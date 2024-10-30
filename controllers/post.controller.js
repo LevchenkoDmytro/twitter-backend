@@ -28,15 +28,12 @@ export const createPost = async (req, res) => {
     })
 
     await newPost.save();
-
+    
     await newPost.populate({
       path: 'user',
       select: '-password',
-    }).populate({
-      path: 'comments.user',
-      select: '-password',
-    });
-    
+    })
+
     res.status(200).json(newPost)
   } catch (error) {
     res.status(500).json({error: "Server error"})
