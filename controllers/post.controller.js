@@ -28,6 +28,15 @@ export const createPost = async (req, res) => {
     })
 
     await newPost.save();
+
+    await newPost.populate({
+      path: 'user',
+      select: '-password',
+    }).populate({
+      path: 'comments.user',
+      select: '-password',
+    });
+    
     res.status(200).json(newPost)
   } catch (error) {
     res.status(500).json({error: "Server error"})
@@ -146,6 +155,7 @@ export const getAllPosts = async (req, res) => {
     if(posts.length === 0) {
       return res.status(200).json([])
     }
+
 
     res.status(200).json(posts)
   } catch (error) {

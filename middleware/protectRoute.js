@@ -4,12 +4,7 @@ import jwt from 'jsonwebtoken'
 export const protectRoute = async (req,res,next) => {
   try {
     const token = req.cookies.jwt
-   
-    console.log('ffff');
-    console.log(token);
-    console.log(req.cookies, 'все кукі');
-    
-    
+           
     if(!token) {
       return res.status(401).json({error: 'You need to login first'})
     }
